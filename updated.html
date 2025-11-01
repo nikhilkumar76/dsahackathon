@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Queue Data Structure Guide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .tab-button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #f0f0f0;
+      color: #333;
+      transition: all 0.3s;
+      font-size: 13px;
+    }
+
+    .tab-button.active {
+      background: #667eea;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .content {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      min-height: 600px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 32px;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      color: #764ba2;
+      margin: 20px 0 10px 0;
+      font-size: 20px;
+    }
+
+    h4 {
+      color: #667eea;
+      margin: 15px 0 8px 0;
+    }
+
+    .card {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input {
+      padding: 12px;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 16px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: #22c55e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #16a34a;
+      transform: scale(1.05);
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    .btn-danger:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+
+    .queue-display {
+      background: #f0f4ff;
+      border: 3px dashed #667eea;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+      text-align: center;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .queue-item {
+      width: 70px;
+      height: 70px;
+      background: #667eea;
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    .queue-item.front {
+      background: #ef4444;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .empty-message {
+      color: #999;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .arrow {
+      color: #667eea;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    p {
+      line-height: 1.8;
+      color: #333;
+      margin: 10px 0;
+    }
+
+    ul, ol {
+      margin: 15px 0 15px 20px;
+    }
+
+    li {
+      margin: 8px 0;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+    }
+
+    th, td {
+      border: 2px solid #667eea;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background: #667eea;
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background: #f8f9ff;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      margin: 15px 0;
+      border-left: 4px solid #667eea;
+    }
+
+    .highlight {
+      background: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .pattern-box {
+      background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    .difficulty {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .difficulty.easy {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .difficulty.medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .difficulty.hard {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .example-box {
+      background: #fffbeb;
+      border: 2px solid #fbbf24;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .warning-box {
+      background: #fee2e2;
+      border: 2px solid #fca5a5;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .success-box {
+      background: #dcfce7;
+      border: 2px solid #86efac;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .comparison-table {
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .flowchart {
+      background: #f8f9ff;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .step {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin: 5px;
+      font-weight: bold;
+    }
+
+    .arrow-down {
+      font-size: 24px;
+      color: #667eea;
+      margin: 5px 0;
+    }
+
+    .node {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .node-box {
+      width: 60px;
+      height: 60px;
+      background: #667eea;
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    .node-pointer {
+      font-size: 20px;
+      color: #667eea;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 Complete Queue Data Structure Guide</h1>
+      <p style="color: white; font-size: 18px;">Master Everything About Queues & Patterns</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('intro')">🎯 Intro</button>
+      <button class="tab-button" onclick="switchTab('fundamentals')">📚 Fundamentals</button>
+      <button class="tab-button" onclick="switchTab('simple-queue')">📦 Simple Queue</button>
+      <button class="tab-button" onclick="switchTab('ll-implementation')">🔗 LL Queue</button>
+      <button class="tab-button" onclick="switchTab('circular-queue')">⭕ Circular</button>
+      <button class="tab-button" onclick="switchTab('priority-queue')">🎯 Priority</button>
+      <button class="tab-button" onclick="switchTab('deque')">↔️ Deque</button>
+      <button class="tab-button" onclick="switchTab('patterns')">🔄 Patterns</button>
+      <button class="tab-button" onclick="switchTab('problems')">🔥 Problems</button>
+      <button class="tab-button" onclick="switchTab('visualizer')">🎮 Visualizer</button>
+    </div>
+
+    <div class="content">
+      <!-- INTRO TAB -->
+      <div id="intro" class="tab-content active">
+        <h2>🎯 Introduction to Queue</h2>
+        
+        <div class="card">
+          <h4>What is a Queue?</h4>
+          <p><span class="highlight">Queue</span> is a linear data structure that follows the <span class="highlight">FIFO (First-In-First-Out)</span> principle.</p>
+          <p>The first element added to the queue will be the first one to be removed.</p>
+        </div>
+
+        <div class="success-box">
+          <strong>✓ Key Principle:</strong> First person to join the line is first to get served!
+        </div>
+
+        <h3>Real-World Analogies:</h3>
+        <div class="card-grid">
+          <div class="card">
+            <strong>🎫 Ticket Counter</strong>
+            <p>People join line → First person served → Exits line</p>
+          </div>
+          <div class="card">
+            <strong>🖨️ Printer Jobs</strong>
+            <p>Documents sent → Printed in order → Output in order</p>
+          </div>
+          <div class="card">
+            <strong>📞 Call Center</strong>
+            <p>Calls received → Answered in order → Customer leaves</p>
+          </div>
+          <div class="card">
+            <strong>🏦 Bank Counter</strong>
+            <p>Customers queue → First served → Exit</p>
+          </div>
+        </div>
+
+        <h3>Queue vs Stack:</h3>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>Queue (FIFO)</th>
+            <th>Stack (LIFO)</th>
+          </tr>
+          <tr>
+            <td><strong>Order</strong></td>
+            <td>First In, First Out</td>
+            <td>Last In, First Out</td>
+          </tr>
+          <tr>
+            <td><strong>Add</strong></td>
+            <td>Rear (Enqueue)</td>
+            <td>Top (Push)</td>
+          </tr>
+          <tr>
+            <td><strong>Remove</strong></td>
+            <td>Front (Dequeue)</td>
+            <td>Top (Pop)</td>
+          </tr>
+          <tr>
+            <td><strong>Real World</strong></td>
+            <td>Line, Printer, Browser History</td>
+            <td>Plate stack, Browser Back Button</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- FUNDAMENTALS TAB -->
+      <div id="fundamentals" class="tab-content">
+        <h2>📚 Fundamentals</h2>
+
+        <h3>1. Core Terminology</h3>
+        <table>
+          <tr>
+            <th>Term</th>
+            <th>Meaning</th>
+            <th>Example</th>
+          </tr>
+          <tr>
+            <td><strong>Front</strong></td>
+            <td>First element in queue</td>
+            <td>[Front: 5] 10 15</td>
+          </tr>
+          <tr>
+            <td><strong>Rear</strong></td>
+            <td>Last element in queue</td>
+            <td>5 10 [Rear: 15]</td>
+          </tr>
+          <tr>
+            <td><strong>Enqueue</strong></td>
+            <td>Add element at rear</td>
+            <td>Enqueue(20) → 5 10 15 [20]</td>
+          </tr>
+          <tr>
+            <td><strong>Dequeue</strong></td>
+            <td>Remove from front</td>
+            <td>Dequeue() → Returns 5 → 10 15</td>
+          </tr>
+          <tr>
+            <td><strong>Peek/Front</strong></td>
+            <td>View front element</td>
+            <td>Peek() → Returns 5 (no removal)</td>
+          </tr>
+          <tr>
+            <td><strong>isEmpty</strong></td>
+            <td>Check if empty</td>
+            <td>isEmpty() → True/False</td>
+          </tr>
+        </table>
+
+        <h3>2. Basic Operations with Visuals</h3>
+        <div class="card">
+          <h4>Step 1: Enqueue 5, 10, 15</h4>
+          <div style="display: flex; gap: 10px; margin: 15px 0; align-items: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">5</div>
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">10</div>
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">15</div>
+            <span style="color: #667eea; font-weight: bold;">← Rear</span>
+          </div>
+          <p>Front → (left side) | Rear → (right side)</p>
+        </div>
+
+        <div class="card">
+          <h4>Step 2: Dequeue() - Remove 5 from front</h4>
+          <div style="display: flex; gap: 10px; margin: 15px 0; align-items: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">10</div>
+            <div style="width: 50px; height: 50px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">15</div>
+            <span style="color: #667eea; font-weight: bold;">← Rear</span>
+          </div>
+          <p>✓ Dequeue returns 5 | Queue becomes [10, 15]</p>
+        </div>
+
+        <div class="card">
+          <h4>Step 3: Enqueue 20</h4>
+          <div style="display: flex; gap: 10px; margin: 15px 0; align-items: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">10</div>
+            <div style="width: 50px; height: 50px; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">15</div>
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">20</div>
+            <span style="color: #667eea; font-weight: bold;">← Rear</span>
+          </div>
+          <p>✓ Queue becomes [10, 15, 20]</p>
+        </div>
+
+        <h3>3. Time & Space Complexity</h3>
+        <table>
+          <tr>
+            <th>Implementation</th>
+            <th>Enqueue</th>
+            <th>Dequeue</th>
+            <th>Peek</th>
+            <th>Space</th>
+            <th>Best For</th>
+          </tr>
+          <tr>
+            <td><strong>Array</strong></td>
+            <td>O(1)</td>
+            <td style="color: #ef4444; font-weight: bold;">O(n)</td>
+            <td>O(1)</td>
+            <td>O(n)</td>
+            <td>Not ideal</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong>Linked List</strong></td>
+            <td>O(1)</td>
+            <td style="color: #22c55e; font-weight: bold;">O(1)</td>
+            <td>O(1)</td>
+            <td>O(n)</td>
+            <td>✓ Best</td>
+          </tr>
+          <tr>
+            <td><strong>Circular Array</strong></td>
+            <td>O(1)</td>
+            <td style="color: #22c55e; font-weight: bold;">O(1)</td>
+            <td>O(1)</td>
+            <td>O(n)</td>
+            <td>✓ Good</td>
+          </tr>
+        </table>
+
+        <div class="warning-box">
+          <strong>⚠️ Important:</strong> Array-based queue has O(n) dequeue because all elements shift left. Use Linked List or Circular Array for O(1) dequeue!
+        </div>
+      </div>
+
+      <!-- SIMPLE QUEUE TAB -->
+      <div id="simple-queue" class="tab-content">
+        <h2>📦 Simple Queue (Linear Queue)</h2>
+
+        <div class="card">
+          <h4>Definition:</h4>
+          <p>A simple queue is the most basic type where elements are added at the rear and removed from the front.</p>
+        </div>
+
+        <h3>Characteristics:</h3>
+        <ul>
+          <li><strong>Add:</strong> Only at rear (end)</li>
+          <li><strong>Remove:</strong> Only from front (beginning)</li>
+          <li><strong>FIFO:</strong> First element added is first removed</li>
+          <li><strong>Issue:</strong> Space wastage after dequeue</li>
+        </ul>
+
+        <h3>Problem with Simple Queue:</h3>
+        <div class="warning-box">
+          <h4>Space Wastage Example:</h4>
+          <p>Initial: [1, 2, 3, 4, 5] (Capacity: 5)</p>
+          <p>After 2 dequeues: [_, _, 3, 4, 5] (2 empty spaces wasted!)</p>
+          <p>Can't add new elements at index 0,1 because front pointer moved!</p>
+        </div>
+
+        <h3>Visual Representation:</h3>
+        <div class="card">
+          <p><strong>Step 1: Initial Queue</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0;">
+            <div style="width: 40px; height: 40px; background: #ef4444; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold;">F</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px;">1</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px;">2</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px;">3</div>
+            <div style="width: 40px; height: 40px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold;">R</div>
+          </div>
+          <p style="font-size: 12px; color: #666;">Front at index 0, Rear at index 3</p>
+
+          <p style="margin-top: 15px;"><strong>Step 2: After 2 Dequeues (Removed 1, 2)</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0;">
+            <div style="width: 40px; height: 40px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px;">X</div>
+            <div style="width: 40px; height: 40px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px;">X</div>
+            <div style="width: 40px; height: 40px; background: #ef4444; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold;">F</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px;">3</div>
+            <div style="width: 40px; height: 40px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; font-weight: bold;">R</div>
+          </div>
+          <p style="font-size: 12px; color: #ef4444;"><strong>❌ Wasted space (2 empty slots)!</strong></p>
+        </div>
+
+        <h3>Implementation (Pseudocode):</h3>
+        <div class="code-block">
+struct Queue {
+    array[MAX_SIZE]
+    front = 0
+    rear = -1
+}
+
+Enqueue(x):
+    if rear < MAX_SIZE - 1:
+        rear++
+        array[rear] = x
+    else:
+        print("Queue Full")
+
+Dequeue():
+    if front > rear:
+        print("Queue Empty")
+    else:
+        value = array[front]
+        front++
+        return value
+
+Peek():
+    if front > rear:
+        return "Empty"
+    return array[front]
+        </div>
+
+        <h3>When to Use:</h3>
+        <ul>
+          <li>✓ Learning/Understanding queues</li>
+          <li>✓ When max size is small</li>
+          <li>❌ Not ideal for production code</li>
+          <li>❌ Inefficient for large datasets</li>
+        </ul>
+
+        <div class="success-box">
+          <strong>💡 Solution:</strong> Use Circular Queue to solve space wastage problem!
+        </div>
+      </div>
+
+      <!-- LINKED LIST QUEUE TAB -->
+      <div id="ll-implementation" class="tab-content">
+        <h2>🔗 Linked List Queue Implementation</h2>
+
+        <div class="card">
+          <h4>Definition:</h4>
+          <p>A linked list queue uses nodes connected via pointers, allowing dynamic memory allocation and efficient O(1) operations.</p>
+        </div>
+
+        <h3>Advantages of Linked List Queue:</h3>
+        <div class="card-grid">
+          <div class="card">
+            <h4>✓ Dynamic Size</h4>
+            <p>No fixed capacity limit</p>
+          </div>
+          <div class="card">
+            <h4>✓ O(1) Operations</h4>
+            <p>Enqueue and dequeue both O(1)</p>
+          </div>
+          <div class="card">
+            <h4>✓ No Memory Waste</h4>
+            <p>Only allocates needed memory</p>
+          </div>
+          <div class="card">
+            <h4>✓ Efficient Memory Use</h4>
+            <p>No shifting required</p>
+          </div>
+        </div>
+
+        <h3>Node Structure:</h3>
+        <div class="code-block">
+class Node {
+    data: value
+    next: pointer to next node
+}
+        </div>
+
+        <h3>Queue Structure:</h3>
+        <div class="code-block">
+class LinkedListQueue {
+    front: pointer to first node
+    rear: pointer to last node
+    size: number of elements
+}
+        </div>
+
+        <h3>Visual Representation:</h3>
+        <div class="example-box">
+          <p><strong>Initial: Empty Queue</strong></p>
+          <div class="node">
+            <div class="node-box" style="background: #ef4444;">Front</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+          <div class="node">
+            <div class="node-box" style="background: #22c55e;">Rear</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>Step 1: Enqueue(10)</strong></p>
+          <div class="node">
+            <div class="node-box" style="background: #ef4444;">Front</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">10</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+          <div class="node">
+            <div class="node-box" style="background: #22c55e;">Rear</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">10</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>Step 2: Enqueue(20)</strong></p>
+          <div class="node">
+            <div class="node-box" style="background: #ef4444;">Front</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">10</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">20</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+          <div class="node">
+            <div class="node-box" style="background: #22c55e;">Rear</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">20</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>Step 3: Enqueue(30)</strong></p>
+          <div class="node">
+            <div class="node-box" style="background: #ef4444;">Front</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">10</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">20</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">30</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+          <div class="node">
+            <div class="node-box" style="background: #22c55e;">Rear</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">30</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>Step 4: Dequeue() → Returns 10</strong></p>
+          <div class="node">
+            <div class="node-box" style="background: #ef4444;">Front</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">20</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">30</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+          <div class="node">
+            <div class="node-box" style="background: #22c55e;">Rear</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box">30</div>
+            <div class="node-pointer">→</div>
+            <div class="node-box" style="background: #ccc;">NULL</div>
+          </div>
+        </div>
+
+        <h3>Implementation (Pseudocode):</h3>
+        <div class="code-block">
+class LinkedListQueue {
+    Node front = null
+    Node rear = null
+    size = 0
+
+    Enqueue(value):
+        newNode = new Node(value)
+        if isEmpty():
+            front = newNode
+            rear = newNode
+        else:
+            rear.next = newNode
+            rear = newNode
+        size++
+
+    Dequeue():
+        if isEmpty():
+            return "Queue Empty"
+        value = front.data
+        front = front.next
+        if front == null:
+            rear = null
+        size--
+        return value
+
+    Peek():
+        if isEmpty():
+            return "Queue Empty"
+        return front.data
+
+    isEmpty():
+        return front == null
+
+    getSize():
+        return size
+}
+        </div>
+
+        <h3>Edge Cases:</h3>
+        <div class="warning-box">
+          <h4>Important Edge Cases:</h4>
+          <ul>
+            <li><strong>Empty Queue:</strong> front and rear both null</li>
+            <li><strong>Single Element:</strong> front and rear point to same node</li>
+            <li><strong>After Last Dequeue:</strong> Reset front and rear to null</li>
+          </ul>
+        </div>
+
+        <h3>When to Use Linked List Queue:</h3>
+        <ul>
+          <li>✓ When you need dynamic size</li>
+          <li>✓ When frequent enqueue/dequeue operations</li>
+          <li>✓ When memory efficiency is important</li>
+          <li>✓ When you don't know the maximum size</li>
+          <li>✓ In production systems</li>
+        </ul>
+
+        <div class="success-box">
+          <strong>💡 Best Practice:</strong> Linked List Queue is the most efficient implementation for general use cases with O(1) time complexity for all operations!
+        </div>
+      </div>
+
+      <!-- CIRCULAR QUEUE TAB -->
+      <div id="circular-queue" class="tab-content">
+        <h2>⭕ Circular Queue</h2>
+
+        <div class="card">
+          <h4>Definition:</h4>
+          <p>A circular queue is an improved version where the rear connects back to the front, creating a circular structure. This eliminates space wastage.</p>
+        </div>
+
+        <h3>Key Advantages:</h3>
+        <div class="card-grid">
+          <div class="card">
+            <h4>✓ No Space Wastage</h4>
+            <p>Wraps around when reaching end</p>
+          </div>
+          <div class="card">
+            <h4>✓ Better Memory Usage</h4>
+            <p>Reuses empty spaces efficiently</p>
+          </div>
+          <div class="card">
+            <h4>✓ Fixed Size</h4>
+            <p>Works well with fixed-size arrays</p>
+          </div>
+          <div class="card">
+            <h4>✓ O(1) All Operations</h4>
+            <p>Enqueue, Dequeue, Peek all O(1)</p>
+          </div>
+        </div>
+
+        <h3>How It Works:</h3>
+        <div class="card">
+          <p><strong>Formula for circular movement:</strong></p>
+          <p style="background: #f0f4ff; padding: 10px; border-radius: 5px; font-family: monospace; text-align: center;">
+            next_position = (current + 1) % capacity
+          </p>
+          <p style="margin-top: 10px;">This wraps the index around when it reaches the end!</p>
+        </div>
+
+        <h3>Visual Example (Capacity = 5):</h3>
+        <div class="example-box">
+          <p><strong>Step 1: Enqueue 1, 2, 3, 4, 5</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">1</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">2</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">3</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">4</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">5</div>
+          </div>
+          <p style="text-align: center; color: #667eea; font-weight: bold;">All slots filled (Queue Full)</p>
+
+          <p style="margin-top: 15px;"><strong>Step 2: Dequeue 1, 2, 3 (Remove from front)</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">X</div>
+            <div style="width: 50px; height: 50px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">X</div>
+            <div style="width: 50px; height: 50px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">X</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">4</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">5</div>
+          </div>
+          <p style="text-align: center; color: #667eea; font-weight: bold;">Front moves to 4 (index 3)</p>
+
+          <p style="margin-top: 15px;"><strong>Step 3: Enqueue 6, 7 (Wrap around!)</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center; flex-wrap: wrap;">
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">6</div>
+            <div style="width: 50px; height: 50px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">7</div>
+            <div style="width: 50px; height: 50px; background: #ccc; color: #999; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">X</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">4</div>
+            <div style="width: 50px; height: 50px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 20px;">5</div>
+          </div>
+          <p style="text-align: center; color: #22c55e; font-weight: bold;">✓ Space reused! Queue = [4, 5, 6, 7]</p>
+        </div>
+
+        <h3>Circular Queue Implementation (Pseudocode):</h3>
+        <div class="code-block">
+struct CircularQueue {
+    array[MAX_SIZE]
+    front = -1
+    rear = -1
+    capacity = MAX_SIZE
+}
+
+Enqueue(x):
+    if (rear + 1) % capacity == front:
+        print("Queue Full")  // No space
+    else:
+        if front == -1:
+            front = 0
+        rear = (rear + 1) % capacity
+        array[rear] = x
+
+Dequeue():
+    if front == -1:
+        print("Queue Empty")
+    else:
+        value = array[front]
+        if front == rear:
+            front = rear = -1
+        else:
+            front = (front + 1) % capacity
+        return value
+
+Peek():
+    if front == -1:
+        return "Empty"
+    return array[front]
+        </div>
+
+        <h3>Conditions in Circular Queue:</h3>
+        <table>
+          <tr>
+            <th>Condition</th>
+            <th>Formula</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td><strong>Empty</strong></td>
+            <td>front == -1</td>
+            <td>No elements</td>
+          </tr>
+          <tr>
+            <td><strong>Full</strong></td>
+            <td>(rear + 1) % capacity == front</td>
+            <td>One empty space reserved</td>
+          </tr>
+          <tr>
+            <td><strong>Single Element</strong></td>
+            <td>front == rear</td>
+            <td>Only one element</td>
+          </tr>
+          <tr>
+            <td><strong>Next Front</strong></td>
+            <td>(front + 1) % capacity</td>
+            <td>Move front circularly</td>
+          </tr>
+          <tr>
+            <td><strong>Next Rear</strong></td>
+            <td>(rear + 1) % capacity</td>
+            <td>Move rear circularly</td>
+          </tr>
+        </table>
+
+        <h3>When to Use Circular Queue:</h3>
+        <ul>
+          <li>✓ Fixed-size queue needed</li>
+          <li>✓ Memory efficiency critical</li>
+          <li>✓ CPU scheduling</li>
+          <li>✓ Printer buffer</li>
+          <li>✓ Traffic light management</li>
+        </ul>
+      </div>
+
+      <!-- PRIORITY QUEUE TAB -->
+      <div id="priority-queue" class="tab-content">
+        <h2>🎯 Priority Queue</h2>
+
+        <div class="card">
+          <h4>Definition:</h4>
+          <p>A priority queue is a special type of queue where elements are served based on their priority rather than arrival order.</p>
+          <p>Higher priority elements are dequeued before lower priority ones.</p>
+        </div>
+
+        <h3>Key Differences from Normal Queue:</h3>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>Normal Queue</th>
+            <th>Priority Queue</th>
+          </tr>
+          <tr>
+            <td><strong>Dequeue Order</strong></td>
+            <td>Arrival order (FIFO)</td>
+            <td>By priority</td>
+          </tr>
+          <tr>
+            <td><strong>Enqueue</strong></td>
+            <td>O(1)</td>
+            <td>O(log n)</td>
+          </tr>
+          <tr>
+            <td><strong>Dequeue</strong></td>
+            <td>O(1)</td>
+            <td>O(log n)</td>
+          </tr>
+          <tr>
+            <td><strong>Use Case</strong></td>
+            <td>Printer jobs</td>
+            <td>Hospital emergency</td>
+          </tr>
+        </table>
+
+        <h3>Visual Example:</h3>
+        <div class="example-box">
+          <p><strong>Scenario: Hospital Emergency Room</strong></p>
+          
+          <p style="margin-top: 10px;"><strong>Patients Arriving (in order):</strong></p>
+          <div style="margin: 10px 0;">
+            <div style="display: flex; gap: 10px; margin: 5px 0; align-items: center;">
+              <div style="width: 60px; height: 40px; background: #fca5a5; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">P1: Critical</div>
+              <span>(Arrived first)</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin: 5px 0; align-items: center;">
+              <div style="width: 60px; height: 40px; background: #fbbf24; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">P2: Minor</div>
+              <span>(Arrived second)</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin: 5px 0; align-items: center;">
+              <div style="width: 60px; height: 40px; background: #fca5a5; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">P3: Critical</div>
+              <span>(Arrived third)</span>
+            </div>
+          </div>
+
+          <p style="margin-top: 15px; color: #ef4444; font-weight: bold;">Normal Queue would serve: P1 → P2 → P3</p>
+          <p style="margin-top: 10px; color: #22c55e; font-weight: bold;">Priority Queue serves: P1 → P3 → P2 (Criticals first!)</p>
+        </div>
+
+        <h3>Implementation Using Heap:</h3>
+        <div class="code-block">
+// Using Min Heap (Priority = Priority Number)
+class PriorityQueue {
+    minHeap[]
+    
+    Enqueue(value, priority):
+        insert(value, priority)  // O(log n)
+        bubbleUp()
+        
+    Dequeue():
+        root = minHeap[0]  // Smallest priority (highest urgency)
+        minHeap[0] = minHeap[last]
+        bubbleDown()
+        return root  // O(log n)
+        
+    Peek():
+        return minHeap[0]  // O(1)
+}
+        </div>
+
+        <h3>Time Complexity Comparison:</h3>
+        <table>
+          <tr>
+            <th>Implementation</th>
+            <th>Enqueue</th>
+            <th>Dequeue</th>
+            <th>Best For</th>
+          </tr>
+          <tr>
+            <td><strong>Array</strong></td>
+            <td>O(n)</td>
+            <td>O(1)</td>
+            <td>Small queues</td>
+          </tr>
+          <tr style="background: #d1fae5;">
+            <td><strong>Min Heap</strong></td>
+            <td>O(log n)</td>
+            <td>O(log n)</td>
+            <td>✓ Most common</td>
+          </tr>
+          <tr>
+            <td><strong>Balanced BST</strong></td>
+            <td>O(log n)</td>
+            <td>O(log n)</td>
+            <td>Complex needs</td>
+          </tr>
+        </table>
+
+        <h3>Real-World Applications:</h3>
+        <ul>
+          <li>🏥 <strong>Hospital Emergency:</strong> Criticality level</li>
+          <li>⚕️ <strong>CPU Scheduling:</strong> Process priority</li>
+          <li>🗺️ <strong>Dijkstra's Algorithm:</strong> Shortest path</li>
+          <li>📊 <strong>Huffman Coding:</strong> Frequency-based priority</li>
+          <li>🎮 <strong>Game AI:</strong> Action priority</li>
+          <li>📱 <strong>OS Task Management:</strong> Task urgency</li>
+          <li>💾 <strong>Cache Management:</strong> Access frequency</li>
+        </ul>
+      </div>
+
+      <!-- DEQUE TAB -->
+      <div id="deque" class="tab-content">
+        <h2>↔️ Deque (Double-Ended Queue)</h2>
+
+        <div class="card">
+          <h4>Definition:</h4>
+          <p><strong>Deque</strong> stands for <strong>Double-Ended Queue</strong>. It's a generalized queue where you can add and remove elements from both ends.</p>
+        </div>
+
+        <h3>Key Features:</h3>
+        <div class="card-grid">
+          <div class="card">
+            <h4>✓ Add Front</h4>
+            <p>Insert at beginning</p>
+          </div>
+          <div class="card">
+            <h4>✓ Add Rear</h4>
+            <p>Insert at end</p>
+          </div>
+          <div class="card">
+            <h4>✓ Remove Front</h4>
+            <p>Delete from beginning</p>
+          </div>
+          <div class="card">
+            <h4>✓ Remove Rear</h4>
+            <p>Delete from end</p>
+          </div>
+        </div>
+
+        <h3>Operations:</h3>
+        <table>
+          <tr>
+            <th>Operation</th>
+            <th>Meaning</th>
+            <th>Complexity</th>
+          </tr>
+          <tr>
+            <td><strong>pushFront(x)</strong></td>
+            <td>Add element at front</td>
+            <td>O(1)</td>
+          </tr>
+          <tr>
+            <td><strong>pushBack(x)</strong></td>
+            <td>Add element at rear</td>
+            <td>O(1)</td>
+          </tr>
+          <tr>
+            <td><strong>popFront()</strong></td>
+            <td>Remove from front</td>
+            <td>O(1)</td>
+          </tr>
+          <tr>
+            <td><strong>popBack()</strong></td>
+            <td>Remove from rear</td>
+            <td>O(1)</td>
+          </tr>
+          <tr>
+            <td><strong>front()</strong></td>
+            <td>Get front element</td>
+            <td>O(1)</td>
+          </tr>
+          <tr>
+            <td><strong>back()</strong></td>
+            <td>Get rear element</td>
+            <td>O(1)</td>
+          </tr>
+        </table>
+
+        <h3>Visual Operations:</h3>
+        <div class="example-box">
+          <p><strong>Initial Deque:</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center;">
+            <span style="color: #667eea; font-weight: bold;">← Front</span>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">B</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">C</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">D</div>
+            <span style="color: #667eea; font-weight: bold;">Rear →</span>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>pushFront(A):</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center;">
+            <span style="color: #667eea; font-weight: bold;">← Front</span>
+            <div style="width: 40px; height: 40px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">A</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">B</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">C</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">D</div>
+            <span style="color: #667eea; font-weight: bold;">Rear →</span>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>pushBack(E):</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center;">
+            <span style="color: #667eea; font-weight: bold;">← Front</span>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">A</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">B</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">C</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">D</div>
+            <div style="width: 40px; height: 40px; background: #22c55e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-weight: bold;">E</div>
+            <span style="color: #667eea; font-weight: bold;">Rear →</span>
+          </div>
+
+          <p style="margin-top: 15px;"><strong>popFront(): Removes A</strong></p>
+          <div style="display: flex; gap: 5px; margin: 10px 0; justify-content: center;">
+            <span style="color: #667eea; font-weight: bold;">← Front</span>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">B</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">C</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">D</div>
+            <div style="width: 40px; height: 40px; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; border-radius: 5px;">E</div>
+            <span style="color: #667eea; font-weight: bold;">Rear →</span>
+          </div>
+        </div>
+
+        <h3>Deque vs Queue vs Stack:</h3>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>Queue</th>
+            <th>Stack</th>
+            <th>Deque</th>
+          </tr>
+          <tr>
+            <td><strong>Add Front</strong></td>
+            <td>❌</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <td><strong>Add Rear</strong></td>
+            <td>✓</td>
+            <td>❌</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <td><strong>Remove Front</strong></td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <td><strong>Remove Rear</strong></td>
+            <td>❌</td>
+            <td>❌</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <td><strong>Order</strong></td>
+            <td>FIFO</td>
+            <td>LIFO</td>
+            <td>Flexible</td>
+          </tr>
+        </table>
+
+        <h3>Applications of Deque:</h3>
+        <ul>
+          <li>📊 <strong>Sliding Window Maximum/Minimum</strong></li>
+          <li>✅ <strong>Palindrome Checking</strong></li>
+          <li>↩️ <strong>Browser Back/Forward</strong> buttons</li>
+          <li>🔄 <strong>Round Robin Scheduling</strong></li>
+          <li>🎯 <strong>Undo/Redo</strong> functionality</li>
+          <li>🧮 <strong>Expression Evaluation</strong></li>
+        </ul>
+      </div>
+
+      <!-- PATTERNS TAB -->
+      <div id="patterns" class="tab-content">
+        <h2>🔄 Queue Patterns & Algorithms</h2>
+
+        <h3>1️⃣ BFS (Breadth-First Search) Pattern</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>Finding shortest path in unweighted graph</li>
+            <li>Level-order tree traversal</li>
+            <li>Connected components</li>
+            <li>Multi-source shortest path</li>
+          </ul>
+          <h4>Pattern:</h4>
+          <div class="code-block">
+queue = new Queue()
+queue.enqueue(start)
+visited[start] = true
+
+while queue not empty:
+    node = queue.dequeue()
+    process(node)
+    
+    for each neighbor of node:
+        if not visited[neighbor]:
+            visited[neighbor] = true
+            queue.enqueue(neighbor)
+          </div>
+          <h4>Complexity: O(V + E)</h4>
+        </div>
+
+        <h3>2️⃣ Sliding Window Pattern</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>Max/Min in sliding window</li>
+            <li>Fixed size window traversal</li>
+            <li>Moving average calculations</li>
+          </ul>
+          <h4>Pattern:</h4>
+          <div class="code-block">
+deque = new Deque()
+result = []
+
+for i in 0 to n-1:
+    // Remove elements outside window
+    while deque not empty and deque.front < i - k + 1:
+        deque.popFront()
+    
+    // Remove smaller elements
+    while deque not empty and arr[deque.back] < arr[i]:
+        deque.popBack()
+    
+    deque.pushBack(i)
+    
+    if i >= k - 1:
+        result.push(arr[deque.front])
+          </div>
+          <h4>Complexity: O(n)</h4>
+        </div>
+
+        <h3>3️⃣ Multi-Source BFS Pattern</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>Find distance from multiple sources</li>
+            <li>Rotting oranges problem</li>
+            <li>Knight's shortest path</li>
+            <li>Prison cells problem</li>
+          </ul>
+          <h4>Pattern:</h4>
+          <div class="code-block">
+queue = new Queue()
+
+// Add all sources
+for each source in sources:
+    queue.enqueue(source)
+    visited[source] = true
+
+// BFS from all sources simultaneously
+while queue not empty:
+    node = queue.dequeue()
+    distance[node] = current_distance
+    
+    for each neighbor:
+        if not visited[neighbor]:
+            visited[neighbor] = true
+            queue.enqueue(neighbor)
+            current_distance++
+          </div>
+          <h4>Complexity: O(rows × cols)</h4>
+        </div>
+
+        <h3>4️⃣ LRU Cache Pattern (Deque + HashMap)</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>LRU Cache implementation</li>
+            <li>Recently used tracking</li>
+            <li>Frequency-based eviction</li>
+          </ul>
+          <h4>Pattern:</h4>
+          <div class="code-block">
+class LRUCache {
+    cache = new HashMap()
+    deque = new Deque()
+    capacity = max_capacity
+    
+    get(key):
+        if key not in cache:
+            return -1
+        // Move to end (most recent)
+        deque.remove(key)
+        deque.pushBack(key)
+        return cache[key]
+    
+    put(key, value):
+        if key in cache:
+            deque.remove(key)
+        else if size == capacity:
+            // Remove least recently used
+            lru_key = deque.popFront()
+            delete cache[lru_key]
+        
+        cache[key] = value
+        deque.pushBack(key)
+}
+          </div>
+          <h4>Complexity: O(1) for all operations</h4>
+        </div>
+
+        <h3>5️⃣ Producer-Consumer Pattern</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>Thread-safe queue processing</li>
+            <li>Task distribution</li>
+            <li>Buffering data</li>
+          </ul>
+          <h4>Pattern:</h4>
+          <div class="code-block">
+class ProducerConsumer {
+    queue = new Queue(capacity)
+    
+    produce(item):
+        while queue.isFull():
+            wait()
+        queue.enqueue(item)
+        notify()
+    
+    consume():
+        while queue.isEmpty():
+            wait()
+        item = queue.dequeue()
+        notify()
+        return item
+}
+          </div>
+          <h4>Used in: Thread pools, message brokers</h4>
+        </div>
+
+        <h3>6️⃣ Topological Sort Pattern</h3>
+        <div class="pattern-box">
+          <h4>When to Use:</h4>
+          <ul>
+            <li>Dependency resolution</li>
+            <li>Course prerequisites</li>
+            <li>Build systems</li>
+            <li>Task scheduling</li>
+          </ul>
+          <h4>Pattern (Kahn's Algorithm):</h4>
+          <div class="code-block">
+inDegree = calculate_indegrees()
+queue = new Queue()
+
+// Add nodes with 0 in-degree
+for each node:
+    if inDegree[node] == 0:
+        queue.enqueue(node)
+
+order = []
+while queue not empty:
+    node = queue.dequeue()
+    order.push(node)
+    
+    for each neighbor of node:
+        inDegree[neighbor]--
+        if inDegree[neighbor] == 0:
+            queue.enqueue(neighbor)
+          </div>
+          <h4>Complexity: O(V + E)</h4>
+        </div>
+      </div>
+
+      <!-- PROBLEMS TAB -->
+      <div id="problems" class="tab-content">
+        <h2>🔥 LeetCode Problems</h2>
+
+        <h3>Easy Level:</h3>
+        <div class="problem-card">
+          <h4>✓ Number of Recent Calls (LeetCode 933)</h4>
+          <span class="difficulty easy">Easy</span>
+          <p><strong>Problem:</strong> Count function calls in last 3000ms</p>
+          <p><strong>Pattern:</strong> Queue for timestamp tracking</p>
+          <p><strong>Complexity:</strong> Time O(n), Space O(n)</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ First Unique Character in String (LeetCode 387)</h4>
+          <span class="difficulty easy">Easy</span>
+          <p><strong>Problem:</strong> Find first non-repeating character</p>
+          <p><strong>Pattern:</strong> Queue + HashMap</p>
+          <p><strong>Complexity:</strong> Time O(n), Space O(1)</p>
+        </div>
+
+        <h3>Medium Level:</h3>
+        <div class="problem-card">
+          <h4>✓ Sliding Window Maximum (LeetCode 239)</h4>
+          <span class="difficulty medium">Medium</span>
+          <p><strong>Problem:</strong> Max in every sliding window</p>
+          <p><strong>Pattern:</strong> Deque with index tracking</p>
+          <p><strong>Complexity:</strong> Time O(n), Space O(k)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Store indices in deque, maintain decreasing order</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Rotting Oranges (LeetCode 994)</h4>
+          <span class="difficulty medium">Medium</span>
+          <p><strong>Problem:</strong> Time for all oranges to rot (multi-source BFS)</p>
+          <p><strong>Pattern:</strong> Queue with time tracking</p>
+          <p><strong>Complexity:</strong> Time O(m×n), Space O(m×n)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Add all rotten oranges at start, process level-by-level</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ LRU Cache (LeetCode 146)</h4>
+          <span class="difficulty medium">Medium</span>
+          <p><strong>Problem:</strong> Design cache with capacity constraint</p>
+          <p><strong>Pattern:</strong> Deque + HashMap</p>
+          <p><strong>Complexity:</strong> Time O(1), Space O(capacity)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Move accessed items to end, evict from front</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Design Circular Queue (LeetCode 622)</h4>
+          <span class="difficulty medium">Medium</span>
+          <p><strong>Problem:</strong> Implement circular queue with fixed size</p>
+          <p><strong>Pattern:</strong> Modulo arithmetic for wraparound</p>
+          <p><strong>Complexity:</strong> Time O(1), Space O(capacity)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Use (index + 1) % capacity for circular movement</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Reveal Cards in Increasing Order (LeetCode 950)</h4>
+          <span class="difficulty medium">Medium</span>
+          <p><strong>Problem:</strong> Determine reveal order for cards</p>
+          <p><strong>Pattern:</strong> Deque + Simulation in reverse</p>
+          <p><strong>Complexity:</strong> Time O(n log n), Space O(n)</p>
+        </div>
+
+        <h3>Hard Level:</h3>
+        <div class="problem-card">
+          <h4>✓ Shortest Path in Binary Matrix (LeetCode 1091)</h4>
+          <span class="difficulty hard">Hard</span>
+          <p><strong>Problem:</strong> Find shortest path in 8-directional grid</p>
+          <p><strong>Pattern:</strong> BFS with distance tracking</p>
+          <p><strong>Complexity:</strong> Time O(m×n), Space O(m×n)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Track (row, col, distance), process level-by-level</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Word Ladder (LeetCode 127)</h4>
+          <span class="difficulty hard">Hard</span>
+          <p><strong>Problem:</strong> Find shortest transformation sequence</p>
+          <p><strong>Pattern:</strong> BFS with neighbor generation</p>
+          <p><strong>Complexity:</strong> Time O(N × L × 26), Space O(N)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Generate neighbors by changing each letter, use BFS</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Trapping Rain Water II (LeetCode 407)</h4>
+          <span class="difficulty hard">Hard</span>
+          <p><strong>Problem:</strong> Calculate trapped rain water in 2D elevation map</p>
+          <p><strong>Pattern:</strong> Priority Queue with multi-source approach</p>
+          <p><strong>Complexity:</strong> Time O(m×n log(m×n)), Space O(m×n)</p>
+        </div>
+
+        <div class="problem-card">
+          <h4>✓ Course Schedule (LeetCode 207)</h4>
+          <span class="difficulty hard">Hard</span>
+          <p><strong>Problem:</strong> Detect cycle in course prerequisites</p>
+          <p><strong>Pattern:</strong> Topological Sort (Kahn's Algorithm)</p>
+          <p><strong>Complexity:</strong> Time O(V + E), Space O(V)</p>
+          <p style="margin-top: 10px; background: #fffbeb; padding: 8px; border-radius: 4px;"><strong>Key Insight:</strong> Use in-degree queue, process nodes with 0 in-degree</p>
+        </div>
+
+        <h3>Interview Tips:</h3>
+        <div class="success-box">
+          <h4>✓ When You See These Words, Think Queue:</h4>
+          <ul>
+            <li><strong>"Shortest path"</strong> → BFS with Queue</li>
+            <li><strong>"Level order"</strong> → BFS with Queue</li>
+            <li><strong>"Sliding window"</strong> → Deque</li>
+            <li><strong>"Recently used"</strong> → Deque + HashMap (LRU)</li>
+            <li><strong>"Max/Min in window"</strong> → Deque with monotonic</li>
+            <li><strong>"All sources simultaneously"</strong> → Multi-source BFS</li>
+            <li><strong>"Dependency"</strong> → Topological Sort with Queue</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>💡 Interview Approach:</h4>
+          <ol>
+            <li><strong>Identify the pattern:</strong> BFS? Sliding Window? LRU?</li>
+            <li><strong>Choose data structure:</strong> Queue, Deque, or Priority Queue?</li>
+            <li><strong>Handle edge cases:</strong> Empty input, single element, duplicates</li>
+            <li><strong>Optimize:</strong> Can we reduce space? Time?</li>
+            <li><strong>Code clearly:</strong> Well-commented, variable names</li>
+            <li><strong>Trace through:</strong> Walk through example before submitting</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- VISUALIZER TAB -->
+      <div id="visualizer" class="tab-content">
+        <h2>🎮 Interactive Queue Visualizer</h2>
+        
+        <div class="controls">
+          <input type="text" id="inputValue" placeholder="Enter a value (number or letter)..." />
+          <button class="btn-primary" onclick="enqueue()">➕ Enqueue</button>
+          <button class="btn-danger" onclick="dequeue()" id="dequeueBtn">➖ Dequeue</button>
+          <button class="btn-secondary" onclick="clearQueue()">🗑️ Clear All</button>
+        </div>
+
+        <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="font-size: 12px; color: #666;"><strong>💡 Try:</strong> Enter "1", "2", "3" and Enqueue them. Then click Dequeue to see FIFO in action!</p>
+        </div>
+
+        <div class="queue-display" id="queueDisplay">
+          <span class="empty-message">Queue is Empty - Start by entering a value</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-label">📊 Queue Size</div>
+            <div class="stat-value" id="queueSize">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">🎯 Front Element</div>
+            <div class="stat-value" id="frontElement" style="font-size: 24px;">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">📌 Rear Element</div>
+            <div class="stat-value" id="rearElement" style="font-size: 24px;">—</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">⚡ Status</div>
+            <div class="stat-value" id="queueStatus" style="font-size: 20px;">Empty</div>
+          </div>
+        </div>
+
+        <h3>Queue Operations Demo:</h3>
+        <div class="card-grid">
+          <div class="card">
+            <h4>Enqueue (Add)</h4>
+            <p>Adds element at the rear</p>
+            <p style="color: #22c55e; font-weight: bold;">✓ Time: O(1)</p>
+          </div>
+          <div class="card">
+            <h4>Dequeue (Remove)</h4>
+            <p>Removes from the front</p>
+            <p style="color: #22c55e; font-weight: bold;">✓ Time: O(1)</p>
+          </div>
+          <div class="card">
+            <h4>Peek (View)</h4>
+            <p>View front without removing</p>
+            <p style="color: #22c55e; font-weight: bold;">✓ Time: O(1)</p>
+          </div>
+          <div class="card">
+            <h4>Clear</h4>
+            <p>Remove all elements</p>
+            <p style="color: #22c55e; font-weight: bold;">✓ Time: O(n)</p>
+          </div>
+        </div>
+
+        <h3>Step-by-Step Examples:</h3>
+        <div class="example-box">
+          <h4>Example 1: Basic FIFO</h4>
+          <ol>
+            <li>Enqueue: 5 → [5]</li>
+            <li>Enqueue: 10 → [5, 10]</li>
+            <li>Enqueue: 15 → [5, 10, 15]</li>
+            <li>Dequeue → Returns 5 → [10, 15]</li>
+            <li>Peek → Returns 10 (no change)</li>
+          </ol>
+        </div>
+
+        <div class="example-box">
+          <h4>Example 2: With Letters</h4>
+          <ol>
+            <li>Enqueue: A → [A]</li>
+            <li>Enqueue: B → [A, B]</li>
+            <li>Enqueue: C → [A, B, C]</li>
+            <li>Dequeue → Returns A → [B, C]</li>
+            <li>Dequeue → Returns B → [C]</li>
+            <li>Dequeue → Returns C → []</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let queue = [];
+
+    function switchTab(tabName) {
+      const tabs = document.querySelectorAll('.tab-content');
+      const buttons = document.querySelectorAll('.tab-button');
+      
+      // Remove active from all tabs and buttons
+      tabs.forEach(tab => tab.classList.remove('active'));
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active to the selected tab
+      const selectedTab = document.getElementById(tabName);
+      if (selectedTab) {
+        selectedTab.classList.add('active');
+      }
+      
+      // Add active to the clicked button
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+    }
+
+    function enqueue() {
+      const input = document.getElementById('inputValue');
+      const value = input.value.trim();
+      
+      if (value === '') {
+        alert('⚠️ Please enter a value!');
+        return;
+      }
+      
+      queue.push(value);
+      input.value = '';
+      updateDisplay();
+      input.focus();
+    }
+
+    function dequeue() {
+      if (queue.length === 0) {
+        alert('⚠️ Queue is empty! Enqueue first.');
+        return;
+      }
+      
+      const removed = queue.shift();
+      updateDisplay();
+      alert(`✓ Dequeued: ${removed}`);
+    }
+
+    function clearQueue() {
+      if (queue.length === 0) {
+        alert('Queue is already empty!');
+        return;
+      }
+      queue = [];
+      document.getElementById('inputValue').value = '';
+      updateDisplay();
+      alert('✓ Queue cleared!');
+    }
+
+    function updateDisplay() {
+      const display = document.getElementById('queueDisplay');
+      
+      if (queue.length === 0) {
+        display.innerHTML = '<span class="empty-message">Queue is Empty - Start Enqueuing!</span>';
+      } else {
+        let html = '<span class="arrow">FRONT →</span>';
+        queue.forEach((item, index) => {
+          const className = index === 0 ? 'queue-item front' : 'queue-item';
+          html += `<div class="${className}">${item}</div>`;
+        });
+        html += '<span class="arrow">← REAR</span>';
+        display.innerHTML = html;
+      }
+      
+      // Update stats
+      document.getElementById('queueSize').textContent = queue.length;
+      document.getElementById('frontElement').textContent = queue.length > 0 ? queue[0] : '—';
+      document.getElementById('rearElement').textContent = queue.length > 0 ? queue[queue.length - 1] : '—';
+      document.getElementById('queueStatus').textContent = queue.length === 0 ? 'Empty' : `Active (${queue.length})`;
+      
+      // Update dequeue button
+      document.getElementById('dequeueBtn').disabled = queue.length === 0;
+    }
+
+    // Allow Enter key to enqueue
+    document.getElementById('inputValue').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        enqueue();
+      }
+    });
+
+    // Initialize display
+    updateDisplay();
+
+    // Focus on input on load
+    window.addEventListener('load', function() {
+      document.getElementById('inputValue').focus();
+    });
+  </script>
+</body>
+</html>
